@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                               onChanged: (value) {
                                 context
                                     .read<TaskListBloc>()
-                                    .add(TaskListSearch(value));
+                                    .add(TaskListSearchEvent(value));
                               },
                               controller: controller,
                               decoration: const InputDecoration(
@@ -104,21 +104,21 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Expanded(child: Consumer<Repository<TaskEntity>>(
                   builder: (context, model, child) {
-                    context.read<TaskListBloc>().add(TaskListStarted());
+                    context.read<TaskListBloc>().add(TaskListStartedEvent());
 
                     return BlocBuilder<TaskListBloc, TaskListState>(
                       builder: (context, state) {
-                        if (state is TaskListSuccess) {
+                        if (state is TaskListSuccessState) {
                           return TaskList(
                               items: state.item, themeData: themeData);
-                        } else if (state is TaskListEmpty) {
+                        } else if (state is TaskListEmptyState) {
                           return const EmptyState();
-                        } else if (state is TaskListLoading ||
-                            state is TaskListInitial) {
+                        } else if (state is TaskListLoadingState ||
+                            state is TaskListInitialState) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
-                        } else if (state is TaskListError) {
+                        } else if (state is TaskListErrorState) {
                           return Center(
                             child: Text(state.errorMessage),
                           );
@@ -181,7 +181,7 @@ class TaskList extends StatelessWidget {
                 textColor: secondaryTextColor,
                 elevation: 0,
                 onPressed: () {
-                  context.read<TaskListBloc>().add(TaskListDeleteAll());
+                  context.read<TaskListBloc>().add(TaskListDeleteAllEvent());
                 },
                 child: const Row(
                   children: [

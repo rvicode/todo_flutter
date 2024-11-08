@@ -8,14 +8,14 @@ part 'tasklist_event.dart';
 
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
   final Repository<TaskEntity> repository;
-  TaskListBloc(this.repository) : super(TaskListInitial()) {
+  TaskListBloc(this.repository) : super(TaskListInitialState()) {
     on<TaskListEvent>(
       (event, emit) async {
-        if (event is TaskListStarted || event is TaskListSearch) {
+        if (event is TaskListStartedEvent || event is TaskListSearchEvent) {
           final String searchTerm;
-          emit(TaskListLoading());
+          emit(TaskListLoadingState());
 
-          if (event is TaskListSearch) {
+          if (event is TaskListSearchEvent) {
             searchTerm = event.searchTerm;
           } else {
             searchTerm = '';
@@ -24,20 +24,20 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
           final item = await repository.getAll(searchKeyword: searchTerm);
           try {
             if (item.isNotEmpty) {
-              emit(TaskListSuccess(item));
+              emit(TaskListSuccessState(item));
             } else {
-              emit(TaskListEmpty());
+              emit(TaskListEmptyState());
             }
           } catch (e) {
             emit(
-              TaskListError(
+              TaskListErrorState(
                 e.toString(),
               ),
             );
           }
-        } else if (event is TaskListDeleteAll) {
+        } else if (event is TaskListDeleteAllEvent) {
           await repository.deleteAll();
-          emit(TaskListEmpty());
+          emit(TaskListEmptyState());
         }
       },
     );

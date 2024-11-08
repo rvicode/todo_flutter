@@ -3,12 +3,12 @@ part of 'tasklist_bloc.dart';
 @immutable
 sealed class TaskListEvent {}
 
-class TaskListStarted extends TaskListEvent {}
+class TaskListStartedEvent extends TaskListEvent {}
 
-class TaskListSearch extends TaskListEvent {
+class TaskListSearchEvent extends TaskListEvent {
   final String searchTerm;
 
-  TaskListSearch(this.searchTerm);
+  TaskListSearchEvent(this.searchTerm);
 }
 
-class TaskListDeleteAll extends TaskListEvent {}
+class TaskListDeleteAllEvent extends TaskListEvent {}
